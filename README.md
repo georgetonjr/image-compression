@@ -1,7 +1,9 @@
 # Image-Compression
 
-<p>Projeto desenvolvido em node.Js utilizando o nestJs como framework,
-o projeto possui somente uma rota que recebe como parametros uma url e um fator de compressao e com isso e feito o download da imagem e caso necessario sera feito o redimensionamento da imagem, sera salvo uma copia da imagem e dos metadados contidos na mesma e depois sera retornado o local onde foram salvo as imagens e os metadados na resposta da requisicao.<p>
+<p>
+Projeto desenvolvido em node.Js utilizando o nestJs como framework,
+o projeto possui somente uma rota que recebe como parâmetros uma url é um fator de compressão e com isso e feito o download da imagem e caso necessário será feito o redimensionamento da imagem, será salvo uma cópia da imagem e dos metadados contidos na mesma e depois será retornado o local onde foram salvo as imagens e os metadados na resposta da requisição.
+<p>
 
 ### Requisitos
 
