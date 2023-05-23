@@ -3,11 +3,11 @@ import { SaveImageUsecase } from './usecase/save-image.usecase';
 import { SaveImageController } from './controller/save-image.controller';
 import { StorageImplementation } from './external/storage-implementation';
 import { ExifImplementation } from './external/exif-impelmentation';
-import { DatabaseModule } from 'src/infra/database.module';
+import { DatabaseModule } from '../../infra/database.module';
 
 @Module({
-  controllers: [SaveImageController],
   imports: [DatabaseModule],
+  controllers: [SaveImageController],
   providers: [
     {
       provide: 'SaveImageUsecase',

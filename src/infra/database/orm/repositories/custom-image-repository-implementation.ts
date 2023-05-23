@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CustomImageEntity } from '../schema/custom-image-schema';
 import { Model } from 'mongoose';
-import { CustomImageRepository } from 'src/module/save-image/domain/repository/custom-image-repository';
-import { CustomImageDto } from 'src/module/save-image/domain/custom-image-dto';
-import { CustomImage } from 'src/module/save-image/domain/entity/custom-image';
+import { CustomImageRepository } from '../../../../module/save-image/domain/repository/custom-image-repository';
+import { CustomImageDto } from '../../../../module/save-image/domain/custom-image-dto';
+import { CustomImage } from '../../../../module/save-image/domain/entity/custom-image';
 
 @Injectable()
 export class CustomImageRepositoryImplementation
