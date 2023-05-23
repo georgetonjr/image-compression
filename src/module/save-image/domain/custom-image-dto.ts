@@ -3,5 +3,4 @@ export interface CustomImageDto {
   width: number;
   exif: string;
   name: string;
-  format: string;
 }

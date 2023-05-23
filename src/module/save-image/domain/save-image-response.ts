@@ -4,13 +4,6 @@ export interface LocalPath {
 }
 
 export interface SaveImageResponse {
-  success: boolean;
-  data?: {
-    localpath: LocalPath;
-    metadata: Record<string, unknown>;
-  };
-  errors?: {
-    code: string;
-    message: string;
-  }[];
+  localpath: LocalPath;
+  metadata: Record<string, unknown>;
 }

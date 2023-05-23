@@ -33,24 +33,28 @@ export class CustomImage {
     return this.width;
   }
 
-  genetateDto(): CustomImageDto {
+  generateDto(): CustomImageDto {
     return Object.assign({} as CustomImageDto, this);
   }
 
   resize(): void {
     let proportion = 0;
 
-    if (this.height < 720 && this.width < 720) {
+    if (this.height <= 720 && this.width <= 720) {
       return;
     }
 
     if (this.height > this.width) {
       proportion = this.height / this.width;
       Reflect.defineProperty(this, 'height', { value: 720 });
-      Reflect.defineProperty(this, 'width', { value: 720 / proportion });
+      Reflect.defineProperty(this, 'width', {
+        value: Math.floor(720 / proportion),
+      });
     } else if (this.height < this.width) {
       proportion = this.width / this.height;
-      Reflect.defineProperty(this, 'height', { value: 720 / proportion });
+      Reflect.defineProperty(this, 'height', {
+        value: Math.floor(720 / proportion),
+      });
       Reflect.defineProperty(this, 'width', { value: 720 });
     }
   }

@@ -1,6 +1,6 @@
-export class FileNotSavedError extends Error {
+export class ImageNotFoundError extends Error {
   constructor(error?: any) {
-    super('File Not Saved Error');
+    super('Image Not Found Error');
     if (error) Error.captureStackTrace(error);
     Object.defineProperty(this, 'message', { enumerable: true });
   }

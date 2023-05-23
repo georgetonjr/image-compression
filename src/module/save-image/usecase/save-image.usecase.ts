@@ -7,6 +7,10 @@ import { LocalPath, SaveImageResponse } from '../domain/save-image-response';
 import { Storage } from '../domain/services/storage';
 import { Exif } from '../domain/services/exif';
 import { CustomImageRepository } from '../domain/repository/custom-image-repository';
+import { FileNotSavedError } from '../errors/file-not-saved-error';
+import { ImageNotFoundError } from '../errors/image-not-found-error';
+import { UnsupportedImageFormatError } from '../errors/unsupported-image-format-error';
+import { UnexpectedError } from '../errors/unexpected-error';
 
 @Injectable()
 export class SaveImageUsecase {
@@ -21,8 +25,11 @@ export class SaveImageUsecase {
 
   async execute(payload: SaveImagePayload): Promise<SaveImageResponse> {
     try {
-      const imageArrayBuffer = await this.fetchimageUrl(payload.image);
+      if (!payload.image.includes('jpg') && !payload.image.includes('jpeg')) {
+        throw new UnsupportedImageFormatError();
+      }
 
+      const imageArrayBuffer = await this.fetchimageUrl(payload.image);
       const imageSharp = this.getImageSharp(imageArrayBuffer);
       const imageMetadata = await imageSharp.metadata();
       const imageExif = this.getExif(imageArrayBuffer);
@@ -42,41 +49,24 @@ export class SaveImageUsecase {
         payload.compression,
       );
 
-      await this.repository.save(customImage.genetateDto());
+      await this.repository.save(customImage.generateDto());
 
       return {
-        success: true,
-        data: {
-          localpath: imageSavedInfo,
-          metadata: imageExif,
-        },
+        localpath: imageSavedInfo,
+        metadata: imageExif || (imageMetadata as Record<string, any>),
       };
     } catch (error) {
-      const errors = [];
-
-      if (error.code === 'ENOENT') {
-        errors.push({
-          code: '400',
-          message: 'Error when trying to save file.',
-        });
+      if (error.code === 'ENOENT' || error.message.includes('ENOENT')) {
+        throw new FileNotSavedError(error);
       } else if (
         error.message === 'Input buffer contains unsupported image format'
       ) {
-        errors.push({
-          code: '404',
-          message: 'Error: image not found.',
-        });
-      } else {
-        errors.push({
-          code: error.code || '400',
-          message: error.message || 'unexpected error',
-        });
+        throw new ImageNotFoundError(error);
+      } else if (error.constructor === UnsupportedImageFormatError) {
+        throw error;
       }
 
-      return {
-        errors,
-        success: false,
-      };
+      throw new UnexpectedError(error);
     }
   }
 
@@ -124,7 +114,7 @@ export class SaveImageUsecase {
         `${pathToSave}/thumb`,
       );
 
-      imageLocalSaved.thumb = `${pathToSave}/original/${customImage.getName()}_thumb.jpg`;
+      imageLocalSaved.thumb = `${pathToSave}/thumb/${customImage.getName()}_thumb.jpg`;
     }
 
     return imageLocalSaved;
